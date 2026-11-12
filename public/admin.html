@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Catálogos · Painel</title>
+<link rel="stylesheet" href="/assets/admin.css">
+</head>
+<body>
+
+<!-- ============ LOGIN ============ -->
+<section class="auth" id="viewLogin" hidden>
+  <form class="auth-card" id="loginForm">
+    <div class="logo">MIZ</div>
+    <h1>Catálogos</h1>
+    <p class="sub">Entre para publicar e gerenciar os catálogos.</p>
+    <label>E-mail<input type="email" name="email" autocomplete="username" required></label>
+    <label>Senha<input type="password" name="password" autocomplete="current-password" required></label>
+    <p class="error" id="loginError" hidden></p>
+    <button class="btn primary block" type="submit">Entrar</button>
+  </form>
+</section>
+
+<!-- ============ TROCA DE SENHA ============ -->
+<section class="auth" id="viewPassword" hidden>
+  <form class="auth-card" id="pwForm">
+    <div class="logo">MIZ</div>
+    <h1 id="pwTitle">Crie sua nova senha</h1>
+    <p class="sub" id="pwSub">Este é seu primeiro acesso. Escolha uma senha só sua para continuar.</p>
+    <label id="pwCurrentWrap">Senha atual<input type="password" name="current" autocomplete="current-password"></label>
+    <label>Nova senha<input type="password" name="password" autocomplete="new-password" minlength="8" required></label>
+    <label>Repita a nova senha<input type="password" name="confirm" autocomplete="new-password" minlength="8" required></label>
+    <p class="hint">Mínimo de 8 caracteres.</p>
+    <p class="error" id="pwError" hidden></p>
+    <button class="btn primary block" type="submit">Salvar nova senha</button>
+    <button class="btn ghost block" type="button" id="pwCancel" hidden>Cancelar</button>
+  </form>
+</section>
+
+<!-- ============ PAINEL ============ -->
+<div id="viewApp" hidden>
+  <header class="top">
+    <div class="top-brand"><span class="logo sm">MIZ</span><span>Catálogos</span></div>
+    <div class="top-user">
+      <span id="userName"></span>
+      <button class="btn ghost sm" id="btnChangePw">Alterar senha</button>
+      <button class="btn ghost sm" id="btnLogout">Sair</button>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="card new">
+      <h2>Novo catálogo</h2>
+      <form id="uploadForm">
+        <label class="drop" id="drop">
+          <input type="file" id="fileInput" accept="application/pdf,.pdf" hidden>
+          <svg viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5M5 20h14"/></svg>
+          <strong id="dropTitle">Arraste o PDF aqui ou clique para escolher</strong>
+          <span id="dropSub">Arquivos grandes são aceitos, sem perda de qualidade.</span>
+        </label>
+
+        <div class="fields" id="uploadFields" hidden>
+          <label>Nome do catálogo
+            <input type="text" id="titleInput" maxlength="120" required placeholder="Ex.: Coleção Fluxo 02">
+          </label>
+          <label>Endereço do link
+            <div class="slug-field"><span id="slugPrefix"></span><input type="text" id="slugInput" maxlength="80" required></div>
+          </label>
+          <label class="check"><input type="checkbox" id="dlInput"> Permitir que a cliente baixe o PDF original</label>
+
+          <div class="upload-progress" id="upProgress" hidden>
+            <div class="bar"><div class="fill" id="upFill"></div></div>
+            <span id="upText"></span>
+          </div>
+          <p class="error" id="uploadError" hidden></p>
+          <div class="row">
+            <button class="btn primary" type="submit" id="btnGenerate">Gerar link</button>
+            <button class="btn ghost" type="button" id="btnClearFile">Trocar arquivo</button>
+          </div>
+        </div>
+      </form>
+    </section>
+
+    <section>
+      <div class="list-head">
+        <h2>Catálogos publicados</h2>
+        <span class="count" id="listCount"></span>
+      </div>
+      <div class="list" id="list"></div>
+      <p class="empty" id="empty" hidden>Nenhum catálogo ainda. Envie o primeiro PDF acima.</p>
+    </section>
+  </main>
+</div>
+
+<!-- ============ EDITAR ============ -->
+<dialog id="editDialog">
+  <form method="dialog" id="editForm">
+    <h3>Editar catálogo</h3>
+    <label>Nome do catálogo<input type="text" name="title" maxlength="120" required></label>
+    <label>Endereço do link
+      <div class="slug-field"><span class="slug-prefix"></span><input type="text" name="slug" maxlength="80" required></div>
+    </label>
+    <p class="warn" id="slugWarn" hidden>Atenção: o link antigo vai parar de funcionar para quem já recebeu.</p>
+    <label class="check"><input type="checkbox" name="allowDownload"> Permitir que a cliente baixe o PDF original</label>
+    <p class="error" id="editError" hidden></p>
+    <div class="row end">
+      <button class="btn ghost" value="cancel" formnovalidate>Cancelar</button>
+      <button class="btn primary" value="save" id="editSave">Salvar</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- ============ CONFIRMAR ============ -->
+<dialog id="confirmDialog">
+  <form method="dialog">
+    <h3 id="confirmTitle"></h3>
+    <p id="confirmText"></p>
+    <div class="row end">
+      <button class="btn ghost" value="cancel">Cancelar</button>
+      <button class="btn danger" value="ok" id="confirmOk"></button>
+    </div>
+  </form>
+</dialog>
+
+<input type="file" id="replaceInput" accept="application/pdf,.pdf" hidden>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="/assets/admin.js"></script>
+</body>
+</html>

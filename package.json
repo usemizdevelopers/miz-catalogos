@@ -1,0 +1,22 @@
+{
+  "name": "miz-catalogo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Publicação de catálogos PDF como páginas web em alta resolução",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "express": "^4.22.3",
+    "multer": "^2.5.0",
+    "mupdf": "^1.28.6",
+    "sharp": "^0.35.5"
+  }
+}
