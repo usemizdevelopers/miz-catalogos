@@ -1,4 +1,4 @@
-import { config } from "./config.js";
+import { BRANDS, DEFAULT_BRAND, assetsOf, brandHeadIcons } from "./brands.js";
 
 // muda a cada deploy/reinício para o navegador buscar JS/CSS novos
 export const ASSET_V = Date.now().toString(36);
@@ -11,16 +11,18 @@ const jsonForScript = (obj) =>
   JSON.stringify(obj).replace(/[<\u2028\u2029]/g, (ch) => "\\u" + ch.charCodeAt(0).toString(16).padStart(4, "0"));
 
 export function renderViewer(c, baseUrl) {
+  const brand = BRANDS[c.brand] || BRANDS[DEFAULT_BRAND];
+  const assets = assetsOf(brand.id);
   const media = `/media/${c.id}/v${c.version}`;
   const manifest = {
     title: c.title,
-    brand: config.brandName,
+    brand: brand.name,
     base: media,
     pages: c.pages,
     download: c.allowDownload ? `/c/${encodeURIComponent(c.slug)}/pdf` : null,
   };
   const url = `${baseUrl}/c/${c.slug}`;
-  const desc = `${config.brandName} · ${c.pages.length} páginas. Toque para folhear.`;
+  const desc = `${brand.name} · ${c.pages.length} páginas. Toque para folhear.`;
   const first = c.pages[0];
 
   return `<!doctype html>
@@ -28,7 +30,7 @@ export function renderViewer(c, baseUrl) {
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>${esc(c.title)} · ${esc(config.brandName)}</title>
+<title>${esc(c.title)} · ${esc(brand.name)}</title>
 <meta name="description" content="${esc(desc)}">
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#141414">
@@ -40,9 +42,7 @@ export function renderViewer(c, baseUrl) {
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
-<link rel="icon" type="image/png" sizes="512x512" href="/assets/icon-512.png">
-<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+${brandHeadIcons(brand.id)}
 <link rel="preload" as="image" href="${media}/pages/1.webp" fetchpriority="high">
 <link rel="stylesheet" href="/assets/viewer.css?v=${ASSET_V}">
 </head>
@@ -50,7 +50,7 @@ export function renderViewer(c, baseUrl) {
 <div class="app" id="app">
   <header class="bar">
     <div class="bar-title">
-      <img class="brand-logo" src="/assets/logo-light.png" alt="${esc(config.brandName)}" width="25" height="30">
+      <img class="brand-logo" src="${assets.logoLight}" alt="${esc(brand.name)}" style="height:${brand.viewerLogoHeight}px">
       <span class="title">${esc(c.title)}</span>
     </div>
     <div class="bar-actions">
@@ -86,21 +86,20 @@ export function renderViewer(c, baseUrl) {
 </html>`;
 }
 
-export function renderMessage(title, text, autoRefresh = false) {
+export function renderMessage(brandId, title, text, autoRefresh = false) {
+  const brand = BRANDS[brandId] || BRANDS[DEFAULT_BRAND];
   return `<!doctype html>
 <html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${esc(title)} · ${esc(config.brandName)}</title>
-<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
-<link rel="icon" type="image/png" sizes="512x512" href="/assets/icon-512.png">
-<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<title>${esc(title)} · ${esc(brand.name)}</title>
+${brandHeadIcons(brand.id)}
 ${autoRefresh ? '<meta http-equiv="refresh" content="30">' : ""}
 <style>
   :root{color-scheme:light dark}
   body{margin:0;min-height:100vh;display:grid;place-items:center;background:#141414;color:#eee;font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;padding:24px;box-sizing:border-box}
   .box{max-width:420px;text-align:center}
-  .brand{height:44px;width:auto;display:block;margin:0 auto}
+  .brand{width:auto;display:block;margin:0 auto}
   h1{font-weight:500;font-size:22px;margin:16px 0 8px}
   p{margin:0;opacity:.75}
 </style></head>
-<body><div class="box"><img class="brand" src="/assets/logo-light.png" alt="${esc(config.brandName)}"><h1>${esc(title)}</h1><p>${esc(text)}</p></div></body></html>`;
+<body><div class="box"><img class="brand" src="${assetsOf(brand.id).logoLight}" alt="${esc(brand.name)}" style="height:${Math.round(brand.viewerLogoHeight * 1.5)}px"><h1>${esc(title)}</h1><p>${esc(text)}</p></div></body></html>`;
 }

@@ -8,19 +8,18 @@ export const DATA_DIR = path.resolve(process.env.DATA_DIR || path.join(ROOT_DIR,
 
 export const config = {
   port: Number(process.env.PORT || 3000),
-  // URL pública (ex.: https://catalogo.usemiz.com). Se vazio, usa o host da requisição.
-  publicUrl: (process.env.PUBLIC_URL || "").replace(/\/+$/, ""),
+  // Domínios de cada marca: ver src/brands.js
   maxUploadMb: Number(process.env.MAX_UPLOAD_MB || 1024),
   // Tamanho (px) do lado maior de cada página gerada. 3200 px = nítido em telas Retina, inclusive com zoom.
   pageSize: Number(process.env.PAGE_SIZE || 3200),
   // Qualidade WebP (1-100). 90 = visualmente idêntico ao PDF.
   webpQuality: Number(process.env.WEBP_QUALITY || 90),
-  brandName: process.env.BRAND_NAME || "MIZ",
 };
 
 export const paths = {
   users: path.join(DATA_DIR, "users.json"),
   catalogs: path.join(DATA_DIR, "catalogs.json"),
+  folders: path.join(DATA_DIR, "folders.json"),
   secret: path.join(DATA_DIR, "secret.key"),
   media: path.join(DATA_DIR, "media"),
   originals: path.join(DATA_DIR, "originals"),

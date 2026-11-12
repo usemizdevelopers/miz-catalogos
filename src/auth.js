@@ -3,6 +3,7 @@ import fs from "node:fs";
 import bcrypt from "bcryptjs";
 import { paths } from "./config.js";
 import { JsonStore } from "./store.js";
+import { BRAND_IDS } from "./brands.js";
 
 const COOKIE = "miz_session";
 const SESSION_DAYS = 14;
@@ -136,8 +137,14 @@ export function sameOrigin(req, res, next) {
   next();
 }
 
+/** Marcas que a usuária pode gerenciar. Sem lista definida = todas. */
+export function userBrands(u) {
+  const list = Array.isArray(u?.brands) ? u.brands.filter((b) => BRAND_IDS.includes(b)) : [];
+  return list.length ? list : BRAND_IDS;
+}
+
 function publicUser(u) {
-  return { email: u.email, name: u.name, mustChangePassword: !!u.mustChangePassword };
+  return { email: u.email, name: u.name, mustChangePassword: !!u.mustChangePassword, brands: userBrands(u) };
 }
 
 // ---------- rotas ----------

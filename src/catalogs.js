@@ -5,6 +5,8 @@ import { fork } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { config, paths } from "./config.js";
 import { JsonStore } from "./store.js";
+import { BRANDS, DEFAULT_BRAND, baseUrlFor } from "./brands.js";
+import * as folders from "./folders.js";
 
 const WORKER = path.join(path.dirname(fileURLToPath(import.meta.url)), "convert-worker.js");
 
@@ -14,6 +16,9 @@ export function initCatalogs() {
   store = new JsonStore(paths.catalogs, []);
   // Conversões interrompidas (ex.: servidor reiniciou) voltam para a fila.
   for (const c of store.data) {
+    // catálogos criados antes das marcas/pastas
+    if (!BRANDS[c.brand]) c.brand = DEFAULT_BRAND;
+    if (c.folderId === undefined || (c.folderId && !folders.get(c.folderId))) c.folderId = null;
     if (c.job) {
       if (fs.existsSync(originalPath(c.id))) enqueue(c.id);
       else {
@@ -53,13 +58,17 @@ export const get = (id) => store.data.find((c) => c.id === id);
 export const getBySlug = (slug) => store.data.find((c) => c.slug === slug);
 
 // ---------- criação / edição ----------
-export function create({ title, slug, allowDownload, tmpFile, originalName, size, user }) {
+export function create({ brand, folderId, title, slug, allowDownload, tmpFile, originalName, size, user }) {
+  if (!BRANDS[brand]) throw Object.assign(new Error("Marca inválida."), { status: 400 });
+  folderId = folders.assertParent(folderId || null, brand);
   const id = crypto.randomBytes(9).toString("base64url");
   fs.mkdirSync(paths.originals, { recursive: true });
   fs.renameSync(tmpFile, originalPath(id));
   const now = new Date().toISOString();
   const c = {
     id,
+    brand,
+    folderId,
     title: String(title || "").trim() || originalName.replace(/\.pdf$/i, ""),
     slug: uniqueSlug(slugify(slug || title || originalName.replace(/\.pdf$/i, ""))),
     allowDownload: !!allowDownload,
@@ -102,6 +111,7 @@ export function update(id, patch) {
   if (typeof patch.slug === "string" && patch.slug.trim()) c.slug = uniqueSlug(slugify(patch.slug), id);
   if (typeof patch.allowDownload === "boolean") c.allowDownload = patch.allowDownload;
   if (typeof patch.published === "boolean") c.published = patch.published;
+  if (patch.folderId !== undefined) c.folderId = folders.assertParent(patch.folderId || null, c.brand);
   c.updatedAt = new Date().toISOString();
   store.save();
   return c;
@@ -187,12 +197,14 @@ function runNext() {
 }
 
 // ---------- formato enviado ao painel ----------
-export function toAdmin(c, baseUrl) {
+export function toAdmin(c, req) {
   return {
     id: c.id,
+    brand: c.brand,
+    folderId: c.folderId,
     title: c.title,
     slug: c.slug,
-    url: `${baseUrl}/c/${c.slug}`,
+    url: `${baseUrlFor(c.brand, req)}/c/${c.slug}`,
     thumb: c.version ? `/media/${c.id}/v${c.version}/thumb.webp` : null,
     allowDownload: c.allowDownload,
     published: c.published,
