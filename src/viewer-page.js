@@ -40,7 +40,9 @@ export function renderViewer(c, baseUrl) {
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="${media}/thumb.webp">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/assets/icon-512.png">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
 <link rel="preload" as="image" href="${media}/pages/1.webp" fetchpriority="high">
 <link rel="stylesheet" href="/assets/viewer.css?v=${ASSET_V}">
 </head>
@@ -48,7 +50,7 @@ export function renderViewer(c, baseUrl) {
 <div class="app" id="app">
   <header class="bar">
     <div class="bar-title">
-      <span class="brand">${esc(config.brandName)}</span>
+      <img class="brand-logo" src="/assets/logo-light.png" alt="${esc(config.brandName)}" width="25" height="30">
       <span class="title">${esc(c.title)}</span>
     </div>
     <div class="bar-actions">
@@ -88,14 +90,17 @@ export function renderMessage(title, text, autoRefresh = false) {
   return `<!doctype html>
 <html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(title)} · ${esc(config.brandName)}</title>
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/assets/icon-512.png">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
 ${autoRefresh ? '<meta http-equiv="refresh" content="30">' : ""}
 <style>
   :root{color-scheme:light dark}
   body{margin:0;min-height:100vh;display:grid;place-items:center;background:#141414;color:#eee;font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;padding:24px;box-sizing:border-box}
   .box{max-width:420px;text-align:center}
-  .brand{letter-spacing:.35em;font-weight:600;font-size:13px;opacity:.6}
+  .brand{height:44px;width:auto;display:block;margin:0 auto}
   h1{font-weight:500;font-size:22px;margin:16px 0 8px}
   p{margin:0;opacity:.75}
 </style></head>
-<body><div class="box"><div class="brand">${esc(config.brandName)}</div><h1>${esc(title)}</h1><p>${esc(text)}</p></div></body></html>`;
+<body><div class="box"><img class="brand" src="/assets/logo-light.png" alt="${esc(config.brandName)}"><h1>${esc(title)}</h1><p>${esc(text)}</p></div></body></html>`;
 }

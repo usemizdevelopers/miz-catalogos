@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <title>Catálogos · Painel</title>
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/assets/icon-512.png">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
 <link rel="stylesheet" href="/assets/admin.css">
 </head>
 <body>
@@ -12,7 +15,7 @@
 <!-- ============ LOGIN ============ -->
 <section class="auth" id="viewLogin" hidden>
   <form class="auth-card" id="loginForm">
-    <div class="logo">MIZ</div>
+    <img class="logo" src="/assets/logo.png" alt="MIZ">
     <h1>Catálogos</h1>
     <p class="sub">Entre para publicar e gerenciar os catálogos.</p>
     <label>E-mail<input type="email" name="email" autocomplete="username" required></label>
@@ -25,7 +28,7 @@
 <!-- ============ TROCA DE SENHA ============ -->
 <section class="auth" id="viewPassword" hidden>
   <form class="auth-card" id="pwForm">
-    <div class="logo">MIZ</div>
+    <img class="logo" src="/assets/logo.png" alt="MIZ">
     <h1 id="pwTitle">Crie sua nova senha</h1>
     <p class="sub" id="pwSub">Este é seu primeiro acesso. Escolha uma senha só sua para continuar.</p>
     <label id="pwCurrentWrap">Senha atual<input type="password" name="current" autocomplete="current-password"></label>
@@ -41,7 +44,7 @@
 <!-- ============ PAINEL ============ -->
 <div id="viewApp" hidden>
   <header class="top">
-    <div class="top-brand"><span class="logo sm">MIZ</span><span>Catálogos</span></div>
+    <div class="top-brand"><img class="logo sm" src="/assets/logo.png" alt="MIZ"><span>Catálogos</span></div>
     <div class="top-user">
       <span id="userName"></span>
       <button class="btn ghost sm" id="btnChangePw">Alterar senha</button>
