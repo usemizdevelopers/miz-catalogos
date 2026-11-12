@@ -4,8 +4,8 @@ Painel para publicar catálogos em PDF como páginas web em alta resolução.
 A designer envia o PDF, clica em **Gerar link** e manda o link para a cliente,
 que folheia o catálogo no celular ou no computador sem baixar o arquivo.
 
-- **Painel:** `https://SEU-DOMINIO/admin`
-- **Catálogo:** `https://SEU-DOMINIO/c/nome-do-catalogo`
+- **Painel:** `https://catalogo.usemiz.com/admin`
+- **Catálogo:** `https://catalogo.usemiz.com/c/nome-do-catalogo`
 
 ## Como funciona
 
@@ -62,7 +62,7 @@ Sem o volume, os catálogos e as senhas somem a cada deploy.
 Em **Environment**:
 
 ```
-PUBLIC_URL=https://catalogo.seudominio.com.br
+PUBLIC_URL=https://catalogo.usemiz.com
 ```
 
 Opcionais:
@@ -77,8 +77,8 @@ Opcionais:
 ### 5. Domínio
 
 1. No seu provedor de DNS, crie um registro **A**: `catalogo` → IP da VPS.
-2. No app, em **Domains → Add Domain**: `catalogo.seudominio.com.br`, porta
-   **3000**, HTTPS ligado. O certificado é emitido sozinho.
+2. No app, em **Domains → Add Domain**: `catalogo.usemiz.com`, porta
+   **80**, HTTPS ligado. O certificado é emitido sozinho.
 
 > **Se o domínio usa Cloudflare:** deixe esse registro como **DNS only**
 > (nuvem cinza). No plano gratuito, a Cloudflare bloqueia uploads acima de
@@ -92,7 +92,7 @@ minutos para ficar pronto; o link já funciona e mostra "em preparação" até l
 
 ### 7. Deploy
 
-Clique em **Deploy**. Quando terminar, acesse `https://catalogo.seudominio.com.br/admin`.
+Clique em **Deploy**. Quando terminar, acesse `https://catalogo.usemiz.com/admin`.
 
 ---
 
